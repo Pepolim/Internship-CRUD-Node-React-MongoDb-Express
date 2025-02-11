@@ -4,7 +4,7 @@ class predefResService {
     
     async createPredefRes(text, type) {
         try {
-            const newPredefRes  = new predefRes({ text, type });
+            const newPredefRes  = new PredefRes({ text, type });
             return await newPredefRes.save();
         } catch (error) {
             throw error;

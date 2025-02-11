@@ -5,6 +5,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoute');
 const questionsRoutes = require('./routes/questionRoute');
 const predefResRoutes = require('./routes/predefResRoute');
+const responsesRoutes = require('./routes/responseRoute');
 const app = express();
 const PORT = process.env.PORT || 5000;
 /*
@@ -31,3 +32,5 @@ app.use("/api/user", userRoutes);
 app.use("/api/question", questionsRoutes);
 
 app.use("/api/predefRes", predefResRoutes);
+
+app.use("/api/response", responsesRoutes);

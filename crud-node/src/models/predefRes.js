@@ -21,6 +21,6 @@ const predefinedResponsesSchema = new mongoose.Schema({
     
 });
 
-const PredefRes = mongoose.model('PredefRes', predefinedResponsesSchema);
+const predefinedResponses = mongoose.model('predefined_responses', predefinedResponsesSchema);
 
-module.exports = PredefRes;
+module.exports = predefinedResponses;
