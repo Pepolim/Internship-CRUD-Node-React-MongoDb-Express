@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const enumOptions = ["Option A", "Option B", "Option C"]; // Substitua pelos valores corretos
+const enumOptions = ["Option A", "Option B", "Option C"];
 
 const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
     const [responses, setResponses] = useState({});
     const navigate = useNavigate();
 
-    // Buscar perguntas do banco de dados
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
@@ -23,7 +22,6 @@ const Questionnaire = () => {
         fetchQuestions();
     }, []);
 
-    // Atualiza a resposta de uma pergunta
     const handleInputChange = (questionID, value) => {
         setResponses((prevResponses) => ({
             ...prevResponses,
@@ -31,7 +29,6 @@ const Questionnaire = () => {
         }));
     };
 
-    // Submeter respostas ao backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -56,9 +53,10 @@ const Questionnaire = () => {
                     <Form.Group key={question._id} className="mb-3">
                         <Form.Label>{question.TextQuestion}</Form.Label>
 
-                        {/* Tipos de respostas baseados em Options */}
+                        {/* Types of responses based on Options */}
                         {question.Options === 1 && (
                             <Form.Control
+                                placeholder="Digite o numero"
                                 type="number"
                                 onChange={(e) => handleInputChange(question._id, e.target.value)}
                             />
@@ -66,15 +64,16 @@ const Questionnaire = () => {
 
                         {question.Options === 2 && (
                             <Form.Select onChange={(e) => handleInputChange(question._id, e.target.value)}>
-                                <option value="">Select</option>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
+                                <option value="true">Sim</option>
+                                <option value="false">Não</option>
                             </Form.Select>
                         )}
 
                         {question.Options === 3 && (
+                            // Renders a list of options from 1 to 5 in a dropdown select element. 
+                            // Each option is rendered with a unique `key` prop and the `value` prop 
+                            // is set to the current number in the iteration.
                             <Form.Select onChange={(e) => handleInputChange(question._id, e.target.value)}>
-                                <option value="">Select</option>
                                 {[1, 2, 3, 4, 5].map((num) => (
                                     <option key={num} value={num}>{num}</option>
                                 ))}
@@ -82,8 +81,9 @@ const Questionnaire = () => {
                         )}
 
                         {question.Options === 4 && (
+                            // Renders a list of options from the `enumOptions` array in a dropdown select element. 
+                            // Each option is rendered with a unique `key` prop and the `value` prop is set to the current option value.
                             <Form.Select onChange={(e) => handleInputChange(question._id, e.target.value)}>
-                                <option value="">Select</option>
                                 {enumOptions.map((opt, index) => (
                                     <option key={index} value={opt}>{opt}</option>
                                 ))}
@@ -93,7 +93,7 @@ const Questionnaire = () => {
                         {question.Options === 5 && (
                             <Form.Control
                                 type="number"
-                                placeholder="Enter time in minutes"
+                                placeholder="Digite o tempo em minutos"
                                 onChange={(e) => handleInputChange(question._id, e.target.value)}
                             />
                         )}
@@ -101,7 +101,7 @@ const Questionnaire = () => {
                         {question.Options === 6 && (
                             <Form.Control
                                 type="text"
-                                placeholder="Enter your response"
+                                placeholder="Escreva a resposta"
                                 onChange={(e) => handleInputChange(question._id, e.target.value)}
                             />
                         )}
