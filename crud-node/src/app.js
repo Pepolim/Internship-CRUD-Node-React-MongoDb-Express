@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoute');
 const questionsRoutes = require('./routes/questionRoute');
+const predefResRoutes = require('./routes/predefResRoute');
 const app = express();
 const PORT = process.env.PORT || 5000;
 /*
@@ -28,3 +29,5 @@ app.listen(PORT, () => {
 app.use("/api/user", userRoutes);
 
 app.use("/api/question", questionsRoutes);
+
+app.use("/api/predefRes", predefResRoutes);

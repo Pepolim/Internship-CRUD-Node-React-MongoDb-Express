@@ -24,7 +24,14 @@ const UpdateUser = () => {
             try {
                 const response = await fetch(`http://localhost:5000/api/user/${id}`);
                 const data = await response.json();
-                setFormData(data);
+
+                // Convert birthdate to YYYY-MM-DD format/*
+                const formattedData = {
+                    ...data,
+                    birthDate: data.birthDate ? data.birthDate.split("T")[0] : ""
+                };      
+
+                setFormData(formattedData);
             } catch (error) {
                 console.error("Error while fetching users: ", error.message);
             }
@@ -44,9 +51,9 @@ const UpdateUser = () => {
         });
     }
 
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
+        try {
             const response = await fetch(`http://localhost:5000/api/user/${id}`, {
                 method: "PATCH",
                 headers: {
@@ -58,90 +65,90 @@ const UpdateUser = () => {
             console.log(data);
             navigate("/");
         }
-        catch(error){
+        catch (error) {
             console.error(error.message);
         }
-        
+
     }
 
     return (
         <>
             <div className="center-form">
-                            <h1>Post New User</h1>
-                            <Form onSubmit={handleSubmit}>
-                                {/* Name Field */}
-                                <Form.Group controlId="formBasicName">
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Enter Name"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </Form.Group>
-            
-                                {/* Role Field (Dropdown) */}
-                                <Form.Group controlId="formBasicRole">
-                                    <Form.Label>Role</Form.Label>
-                                    <Form.Control
-                                        as="select"
-                                        name="role"
-                                        value={formData.role}
-                                        onChange={handleInputChange}
-                                        required
-                                    >
-                                        <option value="">Select Role</option>
-                                        <option value="Intern">Intern</option>
-                                        <option value="Tutor">Tutor</option>
-                                        <option value="Admin">Admin</option>
-                                    </Form.Control>
-                                </Form.Group>
-            
-                                {/* Email Field */}
-                                <Form.Group controlId="formBasicEmail">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        placeholder="Enter email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </Form.Group>
-            
-                                {/* Password Field */}
-                                <Form.Group controlId="formBasicPassword">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Enter password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </Form.Group>
-            
-                                {/* Birthdate Field */}
-                                <Form.Group controlId="formBasicBirthdate">
-                                    <Form.Label>Birthdate</Form.Label>
-                                    <Form.Control
-                                        type="date"
-                                        name="birthdate"
-                                        value={formData.birthdate}
-                                        onChange={handleInputChange}
-                                    />
-                                </Form.Group>
-            
-                                {/* Submit Button */}
-                                <Button variant="dark" type="submit" className="w-100">
-                                    Post User
-                                </Button>
-                            </Form>
-                        </div>
+                <h1>Update User</h1>
+                <Form onSubmit={handleSubmit}>
+                    {/* Name Field */}
+                    <Form.Group controlId="formBasicName">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    {/* Role Field (Dropdown) */}
+                    <Form.Group controlId="formBasicRole">
+                        <Form.Label>Role</Form.Label>
+                        <Form.Control
+                            as="select"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleInputChange}
+                            required
+                        >
+                            <option value="">Select Role</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Tutor">Tutor</option>
+                            <option value="Admin">Admin</option>
+                        </Form.Control>
+                    </Form.Group>
+
+                    {/* Email Field */}
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="Enter email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    {/* Password Field */}
+                    <Form.Group controlId="formBasicPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    {/* Birthdate Field */}
+                    <Form.Group controlId="formBasicBirthdate">
+                        <Form.Label>Birthdate</Form.Label>
+                        <Form.Control
+                            type="date"
+                            name="birthdate"
+                            value={formData.birthDate}
+                            onChange={handleInputChange}
+                        />
+                    </Form.Group>
+
+                    {/* Submit Button */}
+                    <Button variant="dark" type="submit" className="w-100">
+                        Post User
+                    </Button>
+                </Form>
+            </div>
         </>
     )
 }
