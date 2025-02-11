@@ -27,6 +27,10 @@ const Dashboard = () => {
         navigate(`/user/${userId}`);
     };
 
+    const handleQuestions = (userId) => {
+        navigate(`/questionnaire/${userId}`);
+    };
+
     const handleDelete = async () => {
         if (!selectedUser) return;
 
@@ -95,7 +99,7 @@ const Dashboard = () => {
                                         <td>
                                             <Button
                                                 variant="primary"
-                                                //onClick={() => handleQuestions(user._id)}
+                                                onClick={() => handleQuestions(user._id)}
                                             >
                                                 Questionnaire
                                             </Button>{" "}
