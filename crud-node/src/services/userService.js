@@ -1,6 +1,8 @@
 const User = require("../models/user");
 
+// Provides CRUD (Create, Read, Update, Delete) operations for managing users in the application.
 class UserService {
+    // Creates a new user in the database.
     async createUser(name, role, email, password, birthdate) {
         try {
             const newuser = new User({ name, email, role, password, birthdate });
@@ -10,6 +12,8 @@ class UserService {
         }
     }
 
+    
+    // Retrieves all users from the database.
     async getAllUsers() {
         try {
             return await User.find();
@@ -18,6 +22,7 @@ class UserService {
         }
     }
 
+    // Retrieves a user from the database by their unique identifier.
     async getUserById(userId) {
         try {
             return await User.findById(userId);
@@ -26,6 +31,8 @@ class UserService {
         }
     }
 
+    
+    // Updates an existing user in the database.
     async updateUser(userId, updatedData) {
         try {
             return await User.findByIdAndUpdate(userId, updatedData, { 
@@ -36,6 +43,7 @@ class UserService {
         }
     }
 
+    // Deletes a user from the database by their unique identifier.
     async deleteUser(userId) {
         try {
             return await User.findByIdAndDelete(userId);
@@ -45,4 +53,5 @@ class UserService {
     }
 
 };
+
 module.exports = new UserService();

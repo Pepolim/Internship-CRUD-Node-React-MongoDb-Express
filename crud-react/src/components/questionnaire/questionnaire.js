@@ -1,125 +1,117 @@
 import React, { useState, useEffect } from "react";
+import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
+const enumOptions = ["Option A", "Option B", "Option C"]; // Substitua pelos valores corretos
 
 const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
-    const [responses, setResponses] = useState({}); // Guarda as respostas do usuário
+    const [responses, setResponses] = useState({});
+    const navigate = useNavigate();
 
+    // Buscar perguntas do banco de dados
     useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/question");
+                const data = await response.json();
+                setQuestions(data);
+            } catch (error) {
+                console.error("Error fetching questions:", error);
+            }
+        };
         fetchQuestions();
     }, []);
 
-    const fetchQuestions = async () => {
-        try {
-            const response = await fetch("http://localhost:5000/api/question");
-            const data = await response.json();
-            setQuestions(data);
-
-            // Inicializa as respostas vazias para cada pergunta
-            const initialResponses = {};
-            data.forEach((question) => {
-                initialResponses[question._id] = ""; // Define uma resposta vazia para cada pergunta
-            });
-            setResponses(initialResponses);
-        } catch (error) {
-            console.error("Erro ao buscar perguntas:", error);
-        }
-    };
-
-    const handleInputChange = (questionId, value) => {
+    // Atualiza a resposta de uma pergunta
+    const handleInputChange = (questionID, value) => {
         setResponses((prevResponses) => ({
             ...prevResponses,
-            [questionId]: value,
+            [questionID]: value,
         }));
     };
 
+    // Submeter respostas ao backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await fetch("http://localhost:5000/api/response", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    userID: "USER_ID_AQUI", // Trocar pelo ID do usuário autenticado
-                    responses: Object.entries(responses).map(([questionID, responseValue]) => ({
-                        questionID,
-                        responseValue,
-                        responseDate: new Date(),
-                    })),
-                }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ responses }),
             });
-
-            if (response.ok) {
-                console.log("Respostas enviadas com sucesso!");
-            } else {
-                console.error("Erro ao enviar respostas.");
-            }
+            const data = await response.json();
+            console.log("Submission response:", data);
+            navigate("/");
         } catch (error) {
-            console.error("Erro ao enviar respostas:", error);
+            console.error("Error submitting responses:", error);
         }
     };
 
     return (
-        <div>
-            <h1>Questionário</h1>
-            <form onSubmit={handleSubmit}>
+        <div className="container mt-4">
+            <h1>Questionnaire</h1>
+            <Form onSubmit={handleSubmit}>
                 {questions.map((question) => (
-                    <div key={question._id}>
-                        <label>{question.TextQuestion}</label>
+                    <Form.Group key={question._id} className="mb-3">
+                        <Form.Label>{question.TextQuestion}</Form.Label>
 
-                        {/* Tipo 1: Campo de Texto */}
+                        {/* Tipos de respostas baseados em Options */}
                         {question.Options === 1 && (
-                            <input
-                                type="text"
-                                value={responses[question._id] || ""}
+                            <Form.Control
+                                type="number"
                                 onChange={(e) => handleInputChange(question._id, e.target.value)}
                             />
                         )}
 
-                        {/* Tipo 2: Escala Likert (1 a 5) */}
                         {question.Options === 2 && (
-                            <select
-                                value={responses[question._id] || ""}
-                                onChange={(e) => handleInputChange(question._id, e.target.value)}
-                            >
-                                <option value="">Selecione</option>
-                                {[1, 2, 3, 4, 5].map((num) => (
-                                    <option key={num} value={num}>
-                                        {num}
-                                    </option>
-                                ))}
-                            </select>
+                            <Form.Select onChange={(e) => handleInputChange(question._id, e.target.value)}>
+                                <option value="">Select</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </Form.Select>
                         )}
 
-                        {/* Tipo 3: Booleano (Sim/Não) */}
                         {question.Options === 3 && (
-                            <select
-                                value={responses[question._id] || ""}
-                                onChange={(e) => handleInputChange(question._id, e.target.value)}
-                            >
-                                <option value="">Selecione</option>
-                                <option value="true">Sim</option>
-                                <option value="false">Não</option>
-                            </select>
+                            <Form.Select onChange={(e) => handleInputChange(question._id, e.target.value)}>
+                                <option value="">Select</option>
+                                {[1, 2, 3, 4, 5].map((num) => (
+                                    <option key={num} value={num}>{num}</option>
+                                ))}
+                            </Form.Select>
                         )}
 
-                        {/* Tipo 4: Enum (Lista de Opções) */}
                         {question.Options === 4 && (
-                            <select
-                                value={responses[question._id] || ""}
-                                onChange={(e) => handleInputChange(question._id, e.target.value)}
-                            >
-                                <option value="">Selecione</option>
-                                <option value="Option1">Opção 1</option>
-                                <option value="Option2">Opção 2</option>
-                                <option value="Option3">Opção 3</option>
-                            </select>
+                            <Form.Select onChange={(e) => handleInputChange(question._id, e.target.value)}>
+                                <option value="">Select</option>
+                                {enumOptions.map((opt, index) => (
+                                    <option key={index} value={opt}>{opt}</option>
+                                ))}
+                            </Form.Select>
                         )}
-                    </div>
+
+                        {question.Options === 5 && (
+                            <Form.Control
+                                type="number"
+                                placeholder="Enter time in minutes"
+                                onChange={(e) => handleInputChange(question._id, e.target.value)}
+                            />
+                        )}
+
+                        {question.Options === 6 && (
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter your response"
+                                onChange={(e) => handleInputChange(question._id, e.target.value)}
+                            />
+                        )}
+                    </Form.Group>
                 ))}
-                <button type="submit">Enviar Respostas</button>
-            </form>
+
+                <Button variant="primary" type="submit" className="w-100">
+                    Submit
+                </Button>
+            </Form>
         </div>
     );
 };

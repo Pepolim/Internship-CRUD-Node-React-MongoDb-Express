@@ -1,5 +1,7 @@
 const userService = require("../services/userService");
 
+// The `UserController` class provides the main entry points for managing user-related operations in the application. 
+// It handles HTTP requests and responses, and delegates the actual implementation to the `userService` module.
 class UserController {
     async createUser(req, res) {
         try {

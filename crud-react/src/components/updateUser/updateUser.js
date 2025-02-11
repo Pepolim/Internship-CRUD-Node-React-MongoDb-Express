@@ -145,7 +145,7 @@ const UpdateUser = () => {
 
                     {/* Submit Button */}
                     <Button variant="dark" type="submit" className="w-100">
-                        Post User
+                        Update User
                     </Button>
                 </Form>
             </div>

@@ -3,6 +3,15 @@ const userController = require("../controllers/userController");
 
 const router = express.Router();
 
+/**
+ * Defines the routes for user-related operations.
+ * 
+ * - `POST /`: Creates a new user.
+ * - `GET /`: Retrieves all users.
+ * - `GET /:id`: Retrieves a user by their ID.
+ * - `PATCH /:id`: Updates a user by their ID.
+ * - `DELETE /:id`: Deletes a user by their ID.
+ */
 router.post("/", userController.createUser);
 
 router.get("/", userController.getAllUsers);
